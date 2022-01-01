@@ -11,28 +11,32 @@
 
 
 
-//GLfloat vertices[] = {
-//  //vertices                       //color                //tex cord
-//  -0.5f, -0.5f   ,  0.75f   ,     1.0f,0.0f,0.0f,    0.0, 0.0,
-//   0.5f, -0.5f   ,  0.75f   ,     0.0f,1.0f,0.0f,    1.0, 0.0,
-//   0.5f,  0.5f   ,  0.75f   ,     0.0f,0.0f,1.0f,    1.0, 1.0,
-//  -0.5f,  0.5f   ,  0.75f   ,     0.0f,1.0f,0.0f,    0.0, 1.0,
-//                               
-//                               
-// // -1.0f, -1.0f   , -0.75f   ,     0.0f,0.0f,1.0f,    0.0, 0.0,
-// //  1.0f, -1.0f   , -0.75f   ,     1.0f,0.0f,0.3f,    1.0, 0.0,
-// //  1.0f,  1.0f   , -0.75f   ,     0.0f,1.0f,0.0f,    1.0, 1.0,
-// // -1.0f,  1.0f   , -0.75f   ,     0.0f,0.0f,1.0f,    0.0, 1.0,
-//
-//};
+GLfloat vertices[] = {
+  //vertices                       //color                //tex cord
+  
+  
+  
+        -0.5f,-0.5f,-0.25f,     0.0,0.0,  // 0.0f,0.0f,
+         0.5f,-0.5f,-0.25f,     1.0,0.0,  // 1.0f,0.0f,
+         0.5f, 0.5f,-0.25f,     1.0,1.0,  // 1.0f,1.0f,
+        -0.5f, 0.5f,-0.25f,     0.0,1.0,  // 0.0f,1.0f,
+  
+  
+  
+  //-0.5f, -0.5f   ,  0.0f   ,     1.0f,0.0f,0.0f,    0.0, 0.0,
+  // 0.5f, -0.5f   ,  0.0f   ,     0.0f,1.0f,0.0f,    1.0, 0.0,
+  // 0.5f,  0.5f   ,  0.0f   ,     0.0f,0.0f,1.0f,    1.0, 1.0,
+  //-0.5f,  0.5f   ,  0.0f   ,     0.0f,1.0f,0.0f,    0.0, 1.0,
+                               
+                               
+ // -1.0f, -1.0f   , -0.75f   ,     0.0f,0.0f,1.0f,    0.0, 0.0,
+ //  1.0f, -1.0f   , -0.75f   ,     1.0f,0.0f,0.3f,    1.0, 0.0,
+ //  1.0f,  1.0f   , -0.75f   ,     0.0f,1.0f,0.0f,    1.0, 1.0,
+ // -1.0f,  1.0f   , -0.75f   ,     0.0f,0.0f,1.0f,    0.0, 1.0,
 
-float vertices[] = {
-    // positions          // colors           // texture coords
-     0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
-     0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
-    -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-    -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
 };
+
+
 
 
 
@@ -71,6 +75,7 @@ int main()
     glewExperimental = GL_TRUE;
 
     Shader shader("C:/Users/Future/Desktop/PROJECTS/Tyrannosaurus/ASSETS/shader.glsl");
+    shader.Bind();
     
 
     
@@ -83,13 +88,13 @@ int main()
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,32, (GLvoid*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,20, (GLvoid*)0);
                                                    
     glEnableVertexAttribArray(1);                  
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE,32, (GLvoid*)12);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE,20, (GLvoid*)12);
 
-    glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 32, (GLvoid*)24);
+    /*glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 32, (GLvoid*)24);*/
 
 
 
@@ -104,20 +109,20 @@ int main()
     unsigned int texture;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
-    // set the texture wrapping/filtering options (on the currently bound texture object)
 
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
-    // load and generate the texture
-    int width, height, nrChannels;
-    unsigned char* data = stbi_load("C:/Users/Future/Desktop/PROJECTS/Tyrannosaurus/Textures/mem.png", &width, &height, &nrChannels, 0);
+
+    int t_width, t_height, nrChannels;
+    unsigned char* data = stbi_load("C:/Users/Future/Desktop/PROJECTS/Tyrannosaurus/Textures/floor.png", &t_width, &t_height, &nrChannels, 0);
    
     if (data)
     {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, t_width, t_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
     }
     else
@@ -127,8 +132,8 @@ int main()
     stbi_image_free(data);
 
 
-
-
+    shader.SetUniform1i("ourTexture", 0);
+    
 
 
 
@@ -137,18 +142,13 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER, 0); 
     glBindVertexArray(0); 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    //glBindTexture(GL_TEXTURE_2D, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
     
 
 
     
 
-    glm::mat4 model = glm::mat4(1.0f);
-    model = glm::rotate(model, glm::radians(1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    glm::mat4 view = glm::mat4(1.0f);
-    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -5.0f));
-    glm::mat4 projection;
-    projection = glm::perspective(glm::radians(65.0f), (float)800 / 800, 0.1f, 10.0f);
+   
 
     glEnable(GL_DEPTH_TEST);
     while (!glfwWindowShouldClose(window.getGLFWwindow()))
@@ -158,29 +158,28 @@ int main()
         
 
 
+        //std::cout << t_width << "   ::   " << t_height << std::endl;
 
-
-        //glActiveTexture(GL_TEXTURE0); // activate the texture unit first before binding texture
-        //glBindTexture(GL_TEXTURE_2D, texture);
+        
         shader.Bind();
+        glBindTexture(GL_TEXTURE_2D, texture);
         glBindVertexArray(VAO);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-        //glBindTexture(GL_TEXTURE_2D, textureID);
         
         
 
        
-       shader.SetUniform1i("ourTexture", 0);
+       
 
 
 
-       glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
-       //glDrawArrays(GL_TRIANGLES,0,36);
+        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+        //glDrawArrays(GL_TRIANGLES,0,36);
 
 
 
        
-       glfwPollEvents();
+        glfwPollEvents();
         glfwSwapBuffers(window.getGLFWwindow());
     }
     glDeleteVertexArrays(1, &VAO);
@@ -188,4 +187,5 @@ int main()
     glfwTerminate();
     return 0;
 }
+
 
