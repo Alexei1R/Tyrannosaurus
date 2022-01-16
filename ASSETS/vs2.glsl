@@ -8,17 +8,18 @@ uniform mat4 view;
 uniform mat4 view2;
 uniform mat4 projection;
 uniform mat4 trans;
+uniform mat4 trans2;
 
 out vec3 ourColor;
 out vec2 TexCoord;
 
 void main()
 {
-    gl_Position =  trans * projection * view  * view2 * model * vec4(aPos, 1.0);
+    gl_Position =  trans * trans2 * projection * view  * view2 * model * vec4(aPos, 1.0);
     //gl_Position = model * view * projection * vec4(aPos, 1.0);
     //gl_Position = projection * view * model * vec4(aPos, 1.0);
     //gl_Position = vec4(aPos, 1.0);
-    
+
 
     ourColor = aColor;
     TexCoord = aTexCoord;

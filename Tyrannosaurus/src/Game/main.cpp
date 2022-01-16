@@ -4,17 +4,9 @@
 #include "Shader.h"
 #include <iostream>
 #include "stb_image.h"
-
-
-
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow* window);
-
-// settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
-
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 
 
@@ -66,15 +58,11 @@ int main()
     
     
     Shader shader("C:/Users/Future/Desktop/PROJECTS/Tyrannosaurus/ASSETS/vs.glsl" , "C:/Users/Future/Desktop/PROJECTS/Tyrannosaurus/ASSETS/fs.glsl");
+    Shader shader2("C:/Users/Future/Desktop/PROJECTS/Tyrannosaurus/ASSETS/vs2.glsl" , "C:/Users/Future/Desktop/PROJECTS/Tyrannosaurus/ASSETS/fs.glsl");
     
- 
+    shader.Bind();
     
-
-
-
-
-
-
+    
 
     unsigned int VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
@@ -113,8 +101,8 @@ int main()
     glBindTexture(GL_TEXTURE_2D, texture);
 
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -133,13 +121,10 @@ int main()
         std::cout << "Failed to load texture" << std::endl;
     }
     stbi_image_free(data);
-
-
-
+    shader.Bind();
 
     shader.SetUniform1i("ourTexture", 0);
-
-
+    shader.UnBind();
 
 
 
@@ -150,22 +135,36 @@ int main()
 
 
 
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::rotate(model, glm::radians(1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::mat4 view = glm::mat4(1.0f);
+    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+    glm::mat4 projection;
+    projection = glm::perspective(glm::radians(65.0f), (float)800 / 800, 0.1f, 10.0f);
+    glm::mat4 transform = glm::mat4(1.0f);
+    glm::mat4 transform2 = glm::mat4(1.0f);
+    transform2 = glm::translate(transform2, glm::vec3(1, 0.0, 0.0));
+    
+    
 
 
 
+
+
+
+
+
+
+    
+
+
+
+    glEnable(GL_DEPTH_TEST);
     while (!glfwWindowShouldClose(window.getGLFWwindow()))
     {
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        shader.Bind();
-        glBindVertexArray(VAO);
-
         
 
-
-
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        
 
 
 
@@ -177,7 +176,11 @@ int main()
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
     
-    glfwTerminate();
     return 0;
 }
+
+
+
+
+
 

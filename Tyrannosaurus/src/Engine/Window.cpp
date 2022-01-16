@@ -13,6 +13,7 @@ namespace Core {
 	}
 
 	void Window::init(const std::string& name, int width, int height)
+		
 	{
 
 
@@ -20,18 +21,18 @@ namespace Core {
 		this->width = width;
 		this->height = height;
 
-
+		//window hint
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-
+		//glfw init
 		if (!glfwInit())
 		{
-			std::cout << "glfwInit()";
+			std::cout << "glfwInit() = false; ";
 		}
-
+		//create context
 		window = glfwCreateWindow(width, height, name.c_str(), NULL, NULL);
 
 
@@ -49,6 +50,9 @@ namespace Core {
 			std::cout << "GLEW failed..." << std::endl;
 
 		glfwSetWindowUserPointer(window, this);
+		
+
+
 		
 	}
 

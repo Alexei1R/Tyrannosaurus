@@ -197,8 +197,8 @@ void Shader::SetUniform4f(const std::string& name, float v0, float v1, float v2,
 }
 
 
-void Shader::SetUniformMatrix4f(const std::string name, float value, unsigned int count)
+void Shader::SetUniformMatrix4f(const std::string name, float *value, unsigned int count)
 {
 
-	glUniformMatrix4fv(GetUniformLocation(name), count, GL_FALSE, &value);
+	glUniformMatrix4fv(GetUniformLocation(name), count, GL_FALSE, value);
 }
