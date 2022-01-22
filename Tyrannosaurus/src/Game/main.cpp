@@ -14,16 +14,16 @@
 
 float vertices[] = {
 
-      // positions          // colors           // texture coords
-      0.5f,  0.5f, -0.5f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,
-      0.5f, -0.5f, -0.5f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,
-     -0.5f, -0.5f, -0.5f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,
-     -0.5f,  0.5f, -0.5f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f,
+    // positions          // colors           // texture coords
+    0.5f,  0.5f, -0.5f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,
+    0.5f, -0.5f, -0.5f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,
+   -0.5f, -0.5f, -0.5f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,
+   -0.5f,  0.5f, -0.5f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f,
 
-      0.5f,  0.5f, 0.5f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,
-      0.5f, -0.5f, 0.5f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,
-     -0.5f, -0.5f, 0.5f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,
-     -0.5f,  0.5f, 0.5f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f,
+    0.5f,  0.5f, 0.5f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,
+    0.5f, -0.5f, 0.5f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,
+   -0.5f, -0.5f, 0.5f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,
+   -0.5f,  0.5f, 0.5f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f,
 
 
 };
@@ -53,27 +53,27 @@ unsigned int indices[] = {
 
 int main()
 {
-    
-    Core::Window& window = Core::Window::getInstanse();
-    
-    
-    Shader shader("C:/Users/Future/Desktop/PROJECTS/Tyrannosaurus/ASSETS/vs.glsl" , "C:/Users/Future/Desktop/PROJECTS/Tyrannosaurus/ASSETS/fs.glsl");
-    Shader shader2("C:/Users/Future/Desktop/PROJECTS/Tyrannosaurus/ASSETS/vs2.glsl" , "C:/Users/Future/Desktop/PROJECTS/Tyrannosaurus/ASSETS/fs.glsl");
-    
-    shader.Bind();
-    
-    
 
-    unsigned int VBO, VAO, EBO;
+    CoreNative::Window& window = CoreNative::Window::getInstanse();
+
+
+    Shader shader("C:/Users/alexe/OneDrive/Desktop/PROJECTS/Tyrannosaurus/ASSETS/vs.glsl", "C:/Users/alexe/OneDrive/Desktop/PROJECTS/Tyrannosaurus/ASSETS/fs.glsl");
+    //Shader shader2("C:/Users/Future/Desktop/PROJECTS/Tyrannosaurus/ASSETS/vs2.glsl", "C:/Users/Future/Desktop/PROJECTS/Tyrannosaurus/ASSETS/fs.glsl");
+
+    shader.Bind();
+
+
+
+    unsigned int VBO, VAO, IBO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
+    glGenBuffers(1, &IBO);
 
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
@@ -108,7 +108,7 @@ int main()
 
 
     int t_width, t_height, nrChannels;
-    unsigned char* data = stbi_load("C:/Users/Future/Desktop/PROJECTS/Tyrannosaurus/Textures/cat.gif", &t_width, &t_height, &nrChannels, 0);
+    unsigned char* data = stbi_load("C:/Users/alexe/OneDrive/Desktop/PROJECTS/Tyrannosaurus/Textures/cat.gif", &t_width, &t_height, &nrChannels, 0);
 
 
     if (data)
@@ -141,11 +141,12 @@ int main()
     view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
     glm::mat4 projection;
     projection = glm::perspective(glm::radians(65.0f), (float)800 / 800, 0.1f, 10.0f);
-    glm::mat4 transform = glm::mat4(1.0f);
-    glm::mat4 transform2 = glm::mat4(1.0f);
-    transform2 = glm::translate(transform2, glm::vec3(1, 0.0, 0.0));
     
-    
+    //trans * projection * view  * model
+
+    shader.Bind();
+    shader.SetUniformMatrix4f("view", glm::value_ptr(view), 1);
+    shader.SetUniformMatrix4f("projection", glm::value_ptr(projection), 1);
 
 
 
@@ -155,16 +156,30 @@ int main()
 
 
 
-    
 
 
-
+    glClearColor(0.3, 0.5, 0.4,1.0);
     glEnable(GL_DEPTH_TEST);
     while (!glfwWindowShouldClose(window.getGLFWwindow()))
     {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+
+        shader.Bind();
+        glBindVertexArray(VAO);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+
+        shader.SetUniformMatrix4f("model", glm::value_ptr(model), 1);
         
 
+        model = glm::rotate(model, (float)glfwGetTime() * glm::radians(0.05f) , glm::vec3(0.5f, 1.0f, 0.0f));
+
         
+        glDrawElements(GL_TRIANGLES,36,GL_UNSIGNED_INT,nullptr);
+
+
 
 
 
@@ -174,8 +189,8 @@ int main()
 
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);
-    
+    glDeleteBuffers(1, &IBO);
+
     return 0;
 }
 
