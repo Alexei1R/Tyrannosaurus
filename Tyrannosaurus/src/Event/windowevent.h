@@ -18,10 +18,12 @@ namespace CoreNative
 			width(width),
 			height(height) {}
 	public:
-		std::string format() const override
+		EventValue format() const override
 		{
-			std::string formatted = name + ": " + std::to_string(width) + ", " + std::to_string(height);
-			return formatted;
+			EventValue val;
+			val.width = width;
+			val.height = height;
+			return val;
 		}
 	};
 
@@ -32,9 +34,11 @@ namespace CoreNative
 			:
 			Event("Window Close Event", Event::EventType::WINDOW_CLOSED_EVENT) {}
 	public:
-		std::string format() const override
+		EventValue format() const override
 		{
-			return name;
+			EventValue val;
+			val.window = true;
+			return val;
 		}
 	};
 }

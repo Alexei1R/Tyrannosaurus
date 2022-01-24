@@ -18,10 +18,12 @@ namespace CoreNative
 
 
 	public:
-		std::string format() const override
+		EventValue format() const override
 		{
-			std::string formatted = name + ": " + std::to_string(x) + ", " + std::to_string(y);
-			return formatted;
+			EventValue val;
+			val.MousePosX = x;
+			val.MousePosY = y;
+			return val;
 		}
 	};
 
@@ -37,10 +39,11 @@ namespace CoreNative
 			Event("Mouse Scrolled Event", Event::EventType::MOUSE_SCROLLED_EVENT),
 			offset(offset) {}
 	public:
-		std::string format() const override
+		EventValue format() const override
 		{
-			std::string formatted = "";
-			return (offset < 0) ? formatted = name + ": " + "to bottom" : formatted = name + ": " + "to top";
+			EventValue val;
+			val.offset = offset;
+			return val;
 		}
 	};
 
@@ -56,10 +59,11 @@ namespace CoreNative
 			Event("Mouse button pressed", Event::EventType::MOUSE_BUTTON_PRESSED_EVENT),
 			button(button) {}
 	public:
-		std::string format() const override
+		EventValue format() const override
 		{
-			std::string formatted = name + ": " + std::to_string(button);
-			return formatted;
+			EventValue val;
+			val.button = button;
+			return val;
 		}
 
 	};
@@ -75,10 +79,11 @@ namespace CoreNative
 			Event("Mouse button released", Event::EventType::MOUSE_BUTTON_RELEASED_EVENT),
 			button(button) {}
 	public:
-		std::string format() const override
+		EventValue format() const override
 		{
-			std::string formatted = name + ": " + std::to_string(button);
-			return formatted;
+			EventValue val;
+			val.button = button;
+			return val;
 		}
 
 	};

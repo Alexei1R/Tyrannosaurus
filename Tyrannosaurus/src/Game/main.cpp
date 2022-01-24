@@ -1,6 +1,5 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include "Window.h"
 #include "Shader.h"
 #include <iostream>
 #include "stb_image.h"
@@ -8,9 +7,10 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include  "Texture.h"
 
-
-
+#include "window.h"
+#include "event.h"
 
 float vertices[] = {
 
@@ -57,10 +57,38 @@ int main()
     CoreNative::Window& window = CoreNative::Window::getInstanse();
 
 
-    Shader shader("C:/Users/alexe/OneDrive/Desktop/PROJECTS/Tyrannosaurus/ASSETS/vs.glsl", "C:/Users/alexe/OneDrive/Desktop/PROJECTS/Tyrannosaurus/ASSETS/fs.glsl");
-    //Shader shader2("C:/Users/Future/Desktop/PROJECTS/Tyrannosaurus/ASSETS/vs2.glsl", "C:/Users/Future/Desktop/PROJECTS/Tyrannosaurus/ASSETS/fs.glsl");
-
+    Shader shader("C:/Users/alexe/OneDrive/Desktop/PROJECTS/Tyrannosaurus/Tyrannosaurus/ASSETS/vs.glsl", "C:/Users/alexe/OneDrive/Desktop/PROJECTS/Tyrannosaurus/Tyrannosaurus/ASSETS/fs.glsl");
     shader.Bind();
+
+
+    Texture tex("C:/Users/alexe/OneDrive/Desktop/PROJECTS/Tyrannosaurus/Tyrannosaurus/Textures/cat.gif");
+    tex.Bind(0);
+    shader.SetUniform1i("ourTexture", 0);
+
+   
+    
+    
+    window.setfnCallback([](CoreNative::Event& e)
+        {
+            
+            EventValue val = e.format();
+            if (e.getType() == CoreNative::Event::EventType::KEY_PRESSED_EVENT)
+            {
+                //std::cout << (char)val.key << std::endl;;
+                std::cout << (char)val.key << std::endl;
+                if ((int)val.key == GLFW_KEY_SPACE) {
+                    std::cout << "press space" << std::endl;
+                }
+            }
+            
+
+        });
+
+    
+
+     
+    
+
 
 
 
@@ -87,47 +115,6 @@ int main()
 
 
 
-
-
-
-
-
-
-
-
-    stbi_set_flip_vertically_on_load(1);
-    unsigned int texture, texture2;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-
-    int t_width, t_height, nrChannels;
-    unsigned char* data = stbi_load("C:/Users/alexe/OneDrive/Desktop/PROJECTS/Tyrannosaurus/Textures/cat.gif", &t_width, &t_height, &nrChannels, 0);
-
-
-    if (data)
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, t_width, t_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        std::cout << "Failed to load texture" << std::endl;
-    }
-    stbi_image_free(data);
-    shader.Bind();
-
-    shader.SetUniform1i("ourTexture", 0);
-    shader.UnBind();
-
-
-
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
@@ -149,7 +136,8 @@ int main()
     shader.SetUniformMatrix4f("projection", glm::value_ptr(projection), 1);
 
 
-
+    
+    
 
 
 
@@ -178,7 +166,6 @@ int main()
 
         
         glDrawElements(GL_TRIANGLES,36,GL_UNSIGNED_INT,nullptr);
-
 
 
 

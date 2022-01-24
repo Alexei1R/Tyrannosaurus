@@ -14,10 +14,17 @@ file (GLOB Enginefile_h "src/Engine/*.h")
 file (GLOB Gamefile_c "src/Game/*.cpp")
 file (GLOB Gamefile_h "src/Game/*.h")
 
+file (GLOB Inputfile_c "src/Event/*.cpp")
+file (GLOB Inputfile_h "src/Event/*.h")
+
 # Добавьте источник в исполняемый файл этого проекта.
 add_executable (${PROJECT_NAME} 
 
 	#"src/Game/main.cpp"
+
+	"${Inputfile_c}"
+	"${Inputfile_h}"
+
 	"${Gamefile_c}"
 	"${Gamefile_h}"
 	
@@ -34,6 +41,7 @@ add_executable (${PROJECT_NAME}
 
 include_directories(&{PROJECT_NAME}  ${CMAKE_CURRENT_SOURCE_DIR}/src/Engine)
 include_directories(&{PROJECT_NAME}  ${CMAKE_CURRENT_SOURCE_DIR}/src/Game)
+include_directories(&{PROJECT_NAME}  ${CMAKE_CURRENT_SOURCE_DIR}/src/Event)
 
 target_link_libraries(${PROJECT_NAME}
 	glfw

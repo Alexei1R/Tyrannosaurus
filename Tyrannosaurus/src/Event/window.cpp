@@ -15,14 +15,7 @@ namespace CoreNative
 	{
 		init(name, width, height);
 
-		setfnCallback([this](Event& e)
-			{
-				if (e.getType() == Event::EventType::WINDOW_CLOSED_EVENT)
-				{
-					glfwSetWindowShouldClose(window, GL_TRUE);
-				}
-				std::cout << e.format() << std::endl;
-			});
+		
 
 	}
 
@@ -37,9 +30,7 @@ namespace CoreNative
 
 		if (!glfwInit())
 		{
-			__asm {
-				int 3
-			}
+			std::cout << "glfw don't init";
 		}
 
 		window = glfwCreateWindow(width, height, name.c_str(), NULL, NULL);
@@ -49,9 +40,7 @@ namespace CoreNative
 
 		if (!window)
 		{
-			__asm {
-				int 3
-			}
+			std::cout << "window don't init";
 		}
 
 
@@ -122,7 +111,7 @@ namespace CoreNative
 			KeyPressedEvent e(key);
 			handle.fnCallback(e);
 		}
-		else if (action == GLFW_RELEASE)
+		/*else if (action == GLFW_RELEASE)
 		{
 			if (key == GLFW_KEY_SPACE)
 			{
@@ -135,7 +124,7 @@ namespace CoreNative
 			}
 			KeyReleasedEvent e(key);
 			handle.fnCallback(e);
-		}
+		}*/
 	}
 
 
