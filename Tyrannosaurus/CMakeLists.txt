@@ -46,5 +46,4 @@ include_directories(&{PROJECT_NAME}  ${CMAKE_CURRENT_SOURCE_DIR}/src/Event)
 target_link_libraries(${PROJECT_NAME}
 	glfw
 	libglew_static
-
 )
